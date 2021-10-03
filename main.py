@@ -13,7 +13,7 @@ USER_NAME = os.getenv("username")
 PASSWORD = os.getenv("password")
 
 options = Options()
-options.headless = False
+options.headless = True
 
 driver = webdriver.Chrome(options=options)
 driver.get("https://vondelgym.nl/")
