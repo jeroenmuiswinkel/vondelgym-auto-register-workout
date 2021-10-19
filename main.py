@@ -1,10 +1,8 @@
 import os
 
 from dotenv import load_dotenv
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 
-from Day import Day
+from driver import driver
 from Week import Week
 
 load_dotenv()
@@ -12,10 +10,7 @@ load_dotenv()
 USER_NAME = os.getenv("username")
 PASSWORD = os.getenv("password")
 
-options = Options()
-options.headless = True
 
-driver = webdriver.Chrome(options=options)
 driver.get("https://vondelgym.nl/")
 
 login_button = driver.find_element_by_class_name("login_button")
@@ -34,5 +29,24 @@ week = Week([driver.find_element_by_id(f"res_day_{i+1}") for i in range(nb_days)
 
 
 print(f"Page Title is : {driver.title} \n")
-print(week)
+print()
+print("days available: ")
+for i, day in enumerate(week.days):
+    print(f"{i} {day.day} {day.date}")
+print()
+print("workouts on day 5:")
+for i, workout in enumerate(week.days[4].workouts):
+    print(f"{i} {workout}")
+
+driver.find_element_by_id("button_add_to_home_no").click()
+
+driver.find_element_by_id("res_day_5").click()
+week.days[4].workouts[0].reserve()
+print()
+week.days[4].workouts[0].cancel()
+
+# print([f"{day.day} {day.date}" for day in week.days])
+# print()
+# print("overview of lessons in the next week:")
+# print(week)
 driver.close()
